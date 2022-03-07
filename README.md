@@ -1,11 +1,51 @@
-// add badges and stuff here
+# Analytics-Kotlin Appsflyer
 
-# Destination
+Add Appsflyer device mode support to your applications via this plugin for [Analytics-Kotlin](https://github.com/segmentio/analytics-kotlin)
 
-## Getting Started
+## Adding the dependency
 
-// TODO
+To install the Segment-Appsflyer integration, simply add this line to your gradle file:
 
+```
+implementation 'com.segment.analytics.kotlin.destinations:appsflyer:1.4.4'
+```
+
+Or the following for Kotlin DSL
+
+```
+implementation("com.segment.analytics.kotlin.destinations:appsflyer:1.4.4")
+```
+
+
+
+## Using the Plugin in your App
+
+Open the file where you setup and configure the Analytics-Kotlin library.  Add this plugin to the list of imports.
+
+```
+import com.segment.analytics.kotlin.destinations.plugins.AppsflyerDestination
+```
+
+Just under your Analytics-Kotlin library setup, call `analytics.add(plugin = ...)` to add an instance of the plugin to the Analytics timeline.
+
+```
+    analytics = Analytics("<YOUR WRITE KEY>", applicationContext) {
+        this.flushAt = 3
+        this.trackApplicationLifecycleEvents = true
+    }
+    analytics.add(plugin = AppsflyerDestination(applicationContext))
+```
+
+Your events will now begin to flow to Appsflyer in device mode.
+
+
+## Support
+
+Please use Github issues, Pull Requests, or feel free to reach out to our [support team](https://segment.com/help/).
+
+## Integrating with Segment
+
+Interested in integrating your service with us? Check out our [Partners page](https://segment.com/partners/) for more details.
 
 ## License
 ```

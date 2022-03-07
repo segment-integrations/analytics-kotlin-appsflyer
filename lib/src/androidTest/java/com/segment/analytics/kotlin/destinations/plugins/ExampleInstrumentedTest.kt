@@ -1,4 +1,4 @@
-package com.segment.analytics.destinations.plugins
+package com.segment.analytics.kotlin.destinations.plugins
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.segment.analytics.destinations.plugins.test", appContext.packageName)
+        assertEquals("com.segment.analytics.kotlin.destinations.plugins.test", appContext.packageName)
     }
 }
