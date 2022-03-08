@@ -1,4 +1,4 @@
-package com.segment.analytics.kotlin.destinations.plugins
+package com.segment.analytics.kotlin.destinations.appsflyer
 
 import android.app.Activity
 import android.content.Context
@@ -13,6 +13,7 @@ import android.os.Bundle
 import com.appsflyer.AFInAppEventParameterName
 import com.segment.analytics.kotlin.android.plugins.AndroidLifecycle
 import com.appsflyer.deeplink.DeepLinkListener
+import com.segment.analytics.kotlin.core.platform.VersionedPlugin
 import com.segment.analytics.kotlin.core.platform.plugins.logger.*
 import com.segment.analytics.kotlin.core.utilities.getString
 import com.segment.analytics.kotlin.core.utilities.mapTransform
@@ -61,7 +62,7 @@ data class AppsFlyerSettings(
 class AppsFlyerDestination(
     private val applicationContext: Context,
     private var isDebug: Boolean = false
-) : DestinationPlugin(), AndroidLifecycle {
+) : DestinationPlugin(), AndroidLifecycle, VersionedPlugin {
 
     internal var settings: AppsFlyerSettings? = null
     internal var appsflyer: AppsFlyerLib? = null
@@ -235,6 +236,10 @@ class AppsFlyerDestination(
             val editor = sharedPreferences.edit()
             editor.putBoolean(key, value).apply()
         }
+    }
+
+    override fun version(): String {
+        return BuildConfig.VERSION_NAME
     }
 
 }

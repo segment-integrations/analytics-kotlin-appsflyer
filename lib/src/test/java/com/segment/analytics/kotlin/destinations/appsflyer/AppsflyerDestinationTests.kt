@@ -1,4 +1,4 @@
-package com.segment.analytics.kotlin.destinations.plugins
+package com.segment.analytics.kotlin.destinations.appsflyer
 
 import android.app.Activity
 import android.content.Context
@@ -7,23 +7,12 @@ import androidx.core.os.bundleOf
 import com.appsflyer.AppsFlyerLib
 import com.segment.analytics.kotlin.core.*
 import com.segment.analytics.kotlin.core.platform.Plugin
-import io.mockk.Called
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import com.segment.analytics.kotlin.destinations.appsflyer.AppsFlyerDestination
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.verify
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.buildJsonArray
-import kotlinx.serialization.json.buildJsonObject
-import kotlinx.serialization.json.put
-import kotlinx.serialization.json.add
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertNotNull
+import kotlinx.serialization.json.*
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -78,10 +67,10 @@ class AppsflyerDestinationTests {
         appsflyerDestination.update(settingsBlob, Plugin.UpdateType.Initial)
 
         /* assertions about config */
-        assertNotNull(appsflyerDestination.settings)
+        Assertions.assertNotNull(appsflyerDestination.settings)
         with(appsflyerDestination.settings!!) {
-            assertTrue(trackAttributionData)
-            assertEquals("devKey", appsFlyerDevKey)
+            Assertions.assertTrue(trackAttributionData)
+            Assertions.assertEquals("devKey", appsFlyerDevKey)
         }
 
         verify { mockAppsflyer.init("devKey", isNull(inverse = true), mockContext) }
@@ -118,10 +107,10 @@ class AppsflyerDestinationTests {
         appsflyerDestination.update(settingsBlob, Plugin.UpdateType.Initial)
 
         /* assertions about config */
-        assertNotNull(appsflyerDestination.settings)
+        Assertions.assertNotNull(appsflyerDestination.settings)
         with(appsflyerDestination.settings!!) {
-            assertFalse(trackAttributionData)
-            assertEquals("devKey", appsFlyerDevKey)
+            Assertions.assertFalse(trackAttributionData)
+            Assertions.assertEquals("devKey", appsFlyerDevKey)
         }
 
         verify { mockAppsflyer.init("devKey", isNull(), mockContext) }
