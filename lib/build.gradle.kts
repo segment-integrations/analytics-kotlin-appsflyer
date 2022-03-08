@@ -6,6 +6,8 @@ plugins {
     id("mvn-publish")
 }
 
+val VERSION_NAME: String by project
+
 android {
     compileSdk = 31
     buildToolsVersion = "31.0.0"
@@ -17,6 +19,8 @@ android {
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("proguard-consumer-rules.pro")
+
+        buildConfigField("String", "VERSION_NAME", "\"$VERSION_NAME\"")
     }
 
     buildTypes {
@@ -38,7 +42,7 @@ android {
 dependencies {
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
 
-    implementation("com.segment.analytics.kotlin:android:1.4.3")
+    implementation("com.segment.analytics.kotlin:android:1.5.0")
     implementation("androidx.multidex:multidex:2.0.1")
 
     implementation("androidx.core:core-ktx:1.7.0")
