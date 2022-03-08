@@ -7,13 +7,13 @@ Add Appsflyer device mode support to your applications via this plugin for [Anal
 To install the Segment-Appsflyer integration, simply add this line to your gradle file:
 
 ```
-implementation 'com.segment.analytics.kotlin.destinations:appsflyer:1.4.4'
+implementation 'com.segment.analytics.kotlin.destinations:appsflyer:<latest_version>'
 ```
 
 Or the following for Kotlin DSL
 
 ```
-implementation("com.segment.analytics.kotlin.destinations:appsflyer:1.4.4")
+implementation("com.segment.analytics.kotlin.destinations:appsflyer:<latest_version>")
 ```
 
 
