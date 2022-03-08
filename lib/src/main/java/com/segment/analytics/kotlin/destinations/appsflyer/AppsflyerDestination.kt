@@ -1,4 +1,4 @@
-package com.segment.analytics.kotlin.destinations.plugins
+package com.segment.analytics.kotlin.destinations.appsflyer
 
 import android.app.Activity
 import android.content.Context
