@@ -6,7 +6,7 @@ version = getVersionName()
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.6.0"
+    id("org.jetbrains.kotlin.jvm") version "1.8.0"
 
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
@@ -22,8 +22,8 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0")
-        classpath("org.jetbrains.kotlin:kotlin-serialization:1.6.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.0")
+        classpath("org.jetbrains.kotlin:kotlin-serialization:1.8.0")
         classpath("com.android.tools.build:gradle:7.0.4")
     }
 }
