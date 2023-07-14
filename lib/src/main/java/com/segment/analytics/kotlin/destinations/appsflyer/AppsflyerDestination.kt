@@ -189,7 +189,7 @@ class AppsFlyerDestination(
                     }
                 }
                 is List<*> -> buildJsonArray {
-                    value.forEach { v ->
+                    value.iterator().forEach { v ->
                         add(convertToPrimitive(v))
                     }
                 }

@@ -9,13 +9,13 @@ plugins {
 val VERSION_NAME: String by project
 
 android {
-    compileSdk = 31
-    buildToolsVersion = "31.0.0"
+    compileSdk = 33
+    buildToolsVersion = "33.0.1"
 
     defaultConfig {
         multiDexEnabled = true
         minSdk = 16
-        targetSdk = 31
+        targetSdk = 33
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("proguard-consumer-rules.pro")
@@ -40,15 +40,13 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
 
-    implementation("com.segment.analytics.kotlin:android:1.5.0")
+    implementation("com.segment.analytics.kotlin:android:1.10.3")
     implementation("androidx.multidex:multidex:2.0.1")
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.4.1")
-    implementation("com.google.android.material:material:1.5.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.3")
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
 
     implementation("androidx.lifecycle:lifecycle-process:2.4.1")
     implementation("androidx.lifecycle:lifecycle-common-java8:2.4.1")
@@ -63,17 +61,17 @@ dependencies {
 // Test Dependencies
 dependencies {
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
 
-    testImplementation("io.mockk:mockk:1.12.2")
+    testImplementation("io.mockk:mockk:1.12.4")
     testImplementation(platform("org.junit:junit-bom:5.7.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
     // Add Roboelectric dependencies.
     testImplementation("org.robolectric:robolectric:4.7.3")
-    testImplementation("androidx.test:core:1.4.0")
+    testImplementation("androidx.test:core:1.5.0")
 
     // Add JUnit4 legacy dependencies.
     testImplementation("junit:junit:4.13.2")
