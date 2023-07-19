@@ -10,7 +10,6 @@ val VERSION_NAME: String by project
 
 android {
     compileSdk = 33
-    buildToolsVersion = "33.0.1"
 
     defaultConfig {
         multiDexEnabled = true
@@ -40,9 +39,7 @@ android {
 }
 
 dependencies {
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.2")
-
-    implementation("com.segment.analytics.kotlin:android:1.10.3")
+    implementation("com.segment.analytics.kotlin:android:1.12.0")
     implementation("androidx.multidex:multidex:2.0.1")
 
     implementation("androidx.core:core-ktx:1.8.0")
