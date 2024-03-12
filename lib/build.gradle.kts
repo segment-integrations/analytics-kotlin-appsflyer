@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation("com.segment.analytics.kotlin:android:1.12.0")
+    implementation("com.segment.analytics.kotlin:android:1.14.2")
     implementation("androidx.multidex:multidex:2.0.1")
 
     implementation("androidx.core:core-ktx:1.8.0")
@@ -51,7 +51,7 @@ dependencies {
 
 // Partner Dependencies
 dependencies {
-    implementation("com.appsflyer:af-android-sdk:6.3.2")
+    implementation("com.appsflyer:af-android-sdk:6.13.0")
     implementation ("com.android.installreferrer:installreferrer:2.2")
 }
 
