@@ -20,20 +20,7 @@ import com.segment.analytics.kotlin.core.utilities.mapTransform
 import com.segment.analytics.kotlin.core.utilities.toContent
 import kotlinx.serialization.json.*
 
-/*
-This is an example of the AppsFlyer device-mode destination plugin that can be integrated with
-Segment analytics.
-Note: This plugin is NOT SUPPORTED by Segment.  It is here merely as an example,
-and for your convenience should you find it useful.
-To use it in your codebase, we suggest copying this file over and include the following
-dependencies in your `build.gradle` file:
-```
-dependencies {
-    ...
-    implementation 'com.appsflyer:af-android-sdk:6.3.2'
-    implementation 'com.android.installreferrer:installreferrer:2.2'
-}
-```
+
 MIT License
 Copyright (c) 2021 Segment
 Permission is hereby granted, free of charge, to any person obtaining a copy
