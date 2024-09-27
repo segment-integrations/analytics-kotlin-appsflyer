@@ -180,6 +180,7 @@ class AppsFlyerDestination(
 
         private fun convertToPrimitive(value: Any?): JsonElement {
             return when (value) {
+                null -> JsonNull
                 is Boolean -> JsonPrimitive(value)
                 is Number -> JsonPrimitive(value)
                 is String -> JsonPrimitive(value)
