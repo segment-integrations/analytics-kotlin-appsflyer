@@ -134,7 +134,9 @@ If your app does not use a CMP compatible with TCF v2.2, use the SDK API detaile
         <li> Call <br><code>AppsFlyerLib.getInstance().setConsentData(nonGdprUser)</code>  
      </ol>
   <li> Call <code>analytics.add(plugin = appsFlyerDestination)</code>  <br> 
-  
+
+
+#### Activity class
 ```kotlin
 class MainActivity: Activity() {
 
