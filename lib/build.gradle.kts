@@ -10,10 +10,11 @@ val VERSION_NAME: String by project
 
 android {
     compileSdk = 33
+    namespace = "com.segment.analytics.kotlin.destinations.appsflyer"
 
     defaultConfig {
         multiDexEnabled = true
-        minSdk = 16
+        minSdk = 19
         targetSdk = 33
 
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
@@ -30,15 +31,20 @@ android {
     }
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
+    }
+
+    buildFeatures {
+        buildConfig = true
     }
 }
 
 dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
     implementation("com.segment.analytics.kotlin:android:1.14.2")
     implementation("androidx.multidex:multidex:2.0.1")
 
@@ -51,7 +57,7 @@ dependencies {
 
 // Partner Dependencies
 dependencies {
-    implementation("com.appsflyer:af-android-sdk:6.13.0")
+    implementation ("com.appsflyer:af-android-sdk:6.17.3")
     implementation ("com.android.installreferrer:installreferrer:2.2")
 }
 

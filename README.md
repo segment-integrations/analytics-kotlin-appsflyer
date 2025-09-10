@@ -51,6 +51,8 @@ Please use Github issues, Pull Requests, or feel free to reach out to our [suppo
 
 Interested in integrating your service with us? Check out our [Partners page](https://segment.com/partners/) for more details.
 
+### For guidelines on API integrations, please refer to [this](docs/API_GUIDELINES.md) page
+
 ## License
 ```
 MIT License

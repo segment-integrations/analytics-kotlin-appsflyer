@@ -60,7 +60,7 @@ data class AppsFlyerSettings(
 )
 
 class AppsFlyerDestination(
-    private val applicationContext: Context,
+    private val activityContext: Context,
     private var isDebug: Boolean = false
 ) : DestinationPlugin(), AndroidLifecycle, VersionedPlugin {
 
@@ -71,6 +71,9 @@ class AppsFlyerDestination(
     internal var currencyCode: String = ""
     var conversionListener: ExternalAppsFlyerConversionListener? = null
     var deepLinkListener: ExternalDeepLinkListener? = null
+
+    var startAppsFlyerManually: Boolean = false
+    var enableTCFDataCollection: Boolean? = null
 
     override val key: String = "AppsFlyer"
 
@@ -91,8 +94,17 @@ class AppsFlyerDestination(
                     if (it.trackAttributionData) {
                         listener = ConversionListener()
                     }
-                    appsflyer?.setDebugLog(isDebug)
-                    appsflyer?.init(it.appsFlyerDevKey, listener, applicationContext)
+                    appsflyer?.apply {
+                        setDebugLog(isDebug)
+                        init(it.appsFlyerDevKey, listener, activityContext)
+                        enableTCFDataCollection?.let { enabled ->
+                            enableTCFDataCollection(enabled)
+                        }
+                        if (!startAppsFlyerManually) {
+                            start(activityContext)
+                            analytics.log("AppsFlyerLib.getInstance().start($activityContext)")
+                        }
+                    }
                 }
             }
             deepLinkListener?.let {
@@ -119,17 +131,13 @@ class AppsFlyerDestination(
 
         val afProperties = properties.mapTransform(propertiesMapper).mapValues { (_, v) -> v.toContent() }
 
-        appsflyer?.logEvent(applicationContext, event, afProperties)
+        appsflyer?.logEvent(activityContext, event, afProperties)
         analytics.log("appsflyer.logEvent(context, $event, $properties)")
         return payload
     }
 
     override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
         super.onActivityCreated(activity, savedInstanceState)
-        if (activity != null) {
-            AppsFlyerLib.getInstance().start(activity)
-            analytics.log("AppsFlyerLib.getInstance().start($activity)")
-        }
         updateEndUserAttributes()
     }
 
@@ -227,13 +235,13 @@ class AppsFlyerDestination(
 
         private fun getFlag(key: String): Boolean {
             val sharedPreferences: SharedPreferences =
-                applicationContext.getSharedPreferences(AF_SEGMENT_SHARED_PREF, 0)
+                activityContext.getSharedPreferences(AF_SEGMENT_SHARED_PREF, 0)
             return sharedPreferences.getBoolean(key, false)
         }
 
         private fun setFlag(key: String, value: Boolean) {
             val sharedPreferences: SharedPreferences =
-                applicationContext.getSharedPreferences(AF_SEGMENT_SHARED_PREF, 0)
+                activityContext.getSharedPreferences(AF_SEGMENT_SHARED_PREF, 0)
             val editor = sharedPreferences.edit()
             editor.putBoolean(key, value).apply()
         }
