@@ -185,17 +185,17 @@ class AppsFlyerDestination(
                 is Number -> JsonPrimitive(value)
                 is String -> JsonPrimitive(value)
                 is Map<*, *> -> buildJsonObject {
-                    value.forEach { (k, v) ->
+                    for ((k, v) in value) {
                         put(k.toString(), convertToPrimitive(v))
                     }
                 }
                 is List<*> -> buildJsonArray {
-                    value.iterator().forEach { v ->
+                    for (v in value) {
                         add(convertToPrimitive(v))
                     }
                 }
                 is Array<*> -> buildJsonArray {
-                    value.forEach { v ->
+                    for (v in value) {
                         add(convertToPrimitive(v))
                     }
                 }
@@ -207,7 +207,7 @@ class AppsFlyerDestination(
             // See https://segment.com/docs/spec/mobile/#install-attributed.
             val properties = buildJsonObject {
                 put("provider", key)
-                attributionData.forEach { (k, v) ->
+                for ((k, v) in attributionData) {
                     if (k !in setOf("media_source", "adgroup")) {
                         put(k, convertToPrimitive(v))
                     }
