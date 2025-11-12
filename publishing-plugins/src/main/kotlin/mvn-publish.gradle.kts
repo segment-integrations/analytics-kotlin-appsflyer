@@ -130,3 +130,7 @@ tasks.getByName("publishToSonatype") {
     dependsOn("publish")
 }
 
+tasks.getByName("publishTestPublicationToSonatypeRepository") {
+    dependsOn("publish")
+}
+
