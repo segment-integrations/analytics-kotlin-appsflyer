@@ -130,7 +130,9 @@ tasks.getByName("publishToSonatype") {
     dependsOn("publish")
 }
 
-tasks.getByName("publishTestPublicationToSonatypeRepository") {
-    dependsOn("publish")
+tasks.whenTaskAdded {
+    if (name.startsWith("publishTestPublicationTo")) {
+        dependsOn("bundleReleaseAar")
+    }
 }
 
