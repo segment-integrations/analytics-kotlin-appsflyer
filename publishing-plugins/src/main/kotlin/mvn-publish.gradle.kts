@@ -132,7 +132,7 @@ tasks.getByName("publishToSonatype") {
 
 tasks.whenTaskAdded {
     if (name.startsWith("publishTestPublicationTo")) {
-        dependsOn("publish")
+        dependsOn("bundleReleaseAar", "signTestPublication")
     }
 }
 
