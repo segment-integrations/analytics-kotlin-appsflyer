@@ -122,11 +122,24 @@ tasks.getByName("publish") {
     dependsOn("build")
 }
 
+tasks.matching { it.name.startsWith("publish") && it.name.contains("Publication") }.configureEach {
+    mustRunAfter(tasks.matching { it.name.startsWith("sign") })
+}
+
 tasks.getByName("publishToMavenLocal") {
     dependsOn("build")
 }
 
 tasks.getByName("publishToSonatype") {
     dependsOn("publish")
+}
+
+tasks.whenTaskAdded {
+    if (name.startsWith("publishTestPublicationTo")) {
+        dependsOn("bundleReleaseAar")
+    }
+    if (name.startsWith("sign") && name.contains("Publication")) {
+        mustRunAfter("bundleReleaseAar")
+    }
 }
 

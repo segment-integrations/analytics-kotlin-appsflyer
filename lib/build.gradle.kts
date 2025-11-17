@@ -29,7 +29,6 @@ android {
         }
     }
     compileOptions {
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
@@ -39,7 +38,7 @@ android {
 }
 
 dependencies {
-    implementation("com.segment.analytics.kotlin:android:1.14.2")
+    implementation("com.segment.analytics.kotlin:android:1.22.0")
     implementation("androidx.multidex:multidex:2.0.1")
 
     implementation("androidx.core:core-ktx:1.8.0")
@@ -51,7 +50,7 @@ dependencies {
 
 // Partner Dependencies
 dependencies {
-    implementation("com.appsflyer:af-android-sdk:6.13.0")
+    implementation("com.appsflyer:af-android-sdk:6.17.4")
     implementation ("com.android.installreferrer:installreferrer:2.2")
 }
 
