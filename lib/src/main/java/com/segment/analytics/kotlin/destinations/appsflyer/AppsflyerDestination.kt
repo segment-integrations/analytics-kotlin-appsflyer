@@ -30,7 +30,7 @@ dependencies in your `build.gradle` file:
 ```
 dependencies {
     ...
-    implementation 'com.appsflyer:af-android-sdk:6.3.2'
+    implementation 'com.appsflyer:af-android-sdk:6.17.5'
     implementation 'com.android.installreferrer:installreferrer:2.2'
 }
 ```

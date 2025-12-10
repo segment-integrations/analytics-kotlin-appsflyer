@@ -57,7 +57,7 @@ dependencies {
 
 // Partner Dependencies
 dependencies {
-    implementation ("com.appsflyer:af-android-sdk:6.17.3")
+    implementation ("com.appsflyer:af-android-sdk:6.17.5")
     implementation ("com.android.installreferrer:installreferrer:2.2")
 }
 
