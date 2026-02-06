@@ -9,20 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     environment: deployment
     steps:
-      - uses: actions/checkout@v2
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
-      - name: cache gradle dependencies
-        uses: actions/cache@v4
+      - uses: actions/checkout@v4
+      - name: Install devbox
+        uses: jetify-com/devbox-install-action@v0.14.0
         with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-core-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-core-
-      - name: Publush snapshot to sonatype
-        run: ./gradlew publishToSonatype
+          enable-cache: true
+      - name: Publish snapshot to sonatype
+        run: devbox run publish-snapshot
         env:
           SIGNING_KEY_ID: ${{ secrets.SIGNING_KEY_ID }}
           SIGNING_KEY_PASSWORD: ${{ secrets.SIGNING_KEY_PASSWORD }}

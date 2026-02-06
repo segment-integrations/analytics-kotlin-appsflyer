@@ -1,29 +1,40 @@
 {
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
   "packages": {
-    "jdk17":  "latest",
-    "gradle": "latest",
+    "jdk17":              "latest",
+    "gradle":             "latest",
+    "path:./nix#android-sdk": ""
   },
   "shell": {
     "init_hook": [
-      "export JAVA_HOME=\"$(dirname $(dirname $(which java)))\"",
-      "echo 'Devbox environment initialized with Java 17 for AppsFlyer Android SDK compatibility.'",
+      "export ANDROID_SDK_ROOT=\"$(nix --extra-experimental-features 'nix-command flakes' eval --raw 'path:./nix#android-sdk.outPath' 2>/dev/null)/libexec/android-sdk\"",
+      "export ANDROID_HOME=\"$ANDROID_SDK_ROOT\""
     ],
     "scripts": {
       "test": [
-        "./gradlew :lib:testDebugUnitTest --no-daemon",
+        "./gradlew :lib:testDebugUnitTest --no-daemon"
       ],
       "build": [
-        "./gradlew build --no-daemon",
+        "./gradlew build --no-daemon"
       ],
       "clean": [
-        "./gradlew clean --no-daemon",
+        "./gradlew clean --no-daemon"
+      ],
+      "check": [
+        "./gradlew check --no-daemon"
+      ],
+      "publish-release": [
+        "./gradlew publishToSonatype -Prelease closeAndReleaseSonatypeStagingRepository --no-daemon"
+      ],
+      "publish-snapshot": [
+        "./gradlew publishToSonatype --no-daemon"
       ],
       "info": [
         "echo \"JAVA_HOME: $JAVA_HOME\"",
+        "echo \"ANDROID_SDK_ROOT: $ANDROID_SDK_ROOT\"",
         "java -version",
-        "./gradlew -v",
-      ],
-    },
-  },
+        "./gradlew -v"
+      ]
+    }
+  }
 }
