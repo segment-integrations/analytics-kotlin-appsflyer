@@ -160,7 +160,17 @@ class AppsFlyerDestination(
     inner class ConversionListener : AppsFlyerConversionListener {
         override fun onConversionDataSuccess(conversionData: Map<String, Any>) {
             if (!getFlag(CONV_KEY)) {
-                trackInstallAttributed(conversionData)
+                // Check for install type (organic vs non-organic)
+                val status = conversionData["af_status"] as? String
+
+                if (status == "Non-organic") {
+                    // Track attributed install
+                    trackInstallAttributed(conversionData)
+                } else {
+                    // Track organic install (similar to Swift implementation)
+                    analytics.track("Organic Install")
+                }
+
                 setFlag(CONV_KEY, true)
             }
             conversionListener?.onConversionDataSuccess(conversionData)

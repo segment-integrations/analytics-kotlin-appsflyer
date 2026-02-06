@@ -209,12 +209,13 @@ class AppsflyerDestinationTests {
         }
 
         @Test
-        fun `onConversionDataSuccess fires attribution track`() {
+        fun `onConversionDataSuccess fires attribution track for non-organic install`() {
             every {
                 mockSharedPreferences.getBoolean(AppsFlyerDestination.CONV_KEY, false)
             } returns false
 
             val attributionData = mapOf(
+                "af_status" to "Non-organic",
                 "media_source" to "facebook",
                 "adgroup" to "gaming",
                 "campaign" to "pilot_promotion",
@@ -237,6 +238,7 @@ class AppsflyerDestinationTests {
                     put("ad_group", "gaming")
                 })
                 put("provider", "AppsFlyer")
+                put("af_status", "Non-organic")
                 put("product_status", "pilot")
                 put("timestamp", 1632855725)
                 put("user", buildJsonObject {
@@ -249,6 +251,30 @@ class AppsflyerDestinationTests {
                 })
             }
             verify { mockedAnalytics.track("Install Attributed", expectedProps) }
+        }
+
+        @Test
+        fun `onConversionDataSuccess fires organic install track when status is not Non-organic`() {
+            every {
+                mockSharedPreferences.getBoolean(AppsFlyerDestination.CONV_KEY, false)
+            } returns false
+
+            val attributionData = mapOf(
+                "af_status" to "Organic",
+                "timestamp" to 1632855725
+            )
+            conversionListener.onConversionDataSuccess(attributionData)
+
+            verify { mockEditor.putBoolean(AppsFlyerDestination.CONV_KEY, true) }
+            verify { mockedAnalytics.track("Organic Install") }
+
+            // Ensure trackInstallAttributed was NOT called for organic installs
+            verify(exactly = 0) {
+                mockedAnalytics.track(
+                    eq("Install Attributed"),
+                    any()
+                )
+            }
         }
 
         @Test

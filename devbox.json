@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.14.2/.schema/devbox.schema.json",
+  "packages": {
+    "jdk17":  "latest",
+    "gradle": "latest",
+  },
+  "shell": {
+    "init_hook": [
+      "export JAVA_HOME=\"$(dirname $(dirname $(which java)))\"",
+      "echo 'Devbox environment initialized with Java 17 for AppsFlyer Android SDK compatibility.'",
+    ],
+    "scripts": {
+      "test": [
+        "./gradlew :lib:testDebugUnitTest --no-daemon",
+      ],
+      "build": [
+        "./gradlew build --no-daemon",
+      ],
+      "clean": [
+        "./gradlew clean --no-daemon",
+      ],
+      "info": [
+        "echo \"JAVA_HOME: $JAVA_HOME\"",
+        "java -version",
+        "./gradlew -v",
+      ],
+    },
+  },
+}

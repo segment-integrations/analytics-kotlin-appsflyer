@@ -11,7 +11,12 @@ plugins {
     // Apply the java-library plugin for API and implementation separation.
     `java-library`
     id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
+}
 
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
 }
 
 buildscript {
