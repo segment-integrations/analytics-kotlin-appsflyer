@@ -16,6 +16,9 @@ ext["signing.secretKeyRingFile"] = null
 ext["ossrhUsername"] = null
 ext["ossrhPassword"] = null
 
+// Set when signing via CI env vars; holds the ASCII-armored private key for useInMemoryPgpKeys
+var ciSigningKey: String? = null
+
 fun loadSecrets(secretPropsFile: File) {
     if (secretPropsFile.exists()) {
         secretPropsFile.reader().use {
@@ -37,15 +40,9 @@ if (getExtraString("signing.keyId") == null) {
 
     val pgpKeyContent = System.getenv("SIGNING_PRIVATE_KEY_BASE64")
     if (pgpKeyContent != null) {
-        val tmpDir = File("${project.rootProject.rootDir}/tmp")
-        mkdir(tmpDir)
-        val keyFile = File("$tmpDir/key.pgp")
-        keyFile.createNewFile()
-        val os = keyFile.outputStream()
-        os.write(Base64.getDecoder().decode(pgpKeyContent))
-        os.close()
-
-        ext["signing.secretKeyRingFile"] = keyFile.absolutePath
+        // useInMemoryPgpKeys expects the ASCII-armored key text, not a binary keyring file,
+        // so decode straight to a string instead of writing out a secretKeyRingFile.
+        ciSigningKey = String(Base64.getDecoder().decode(pgpKeyContent))
     }
 }
 
@@ -113,6 +110,10 @@ afterEvaluate {
     }
 
     signing {
+        val signingKey = ciSigningKey
+        if (signingKey != null) {
+            useInMemoryPgpKeys(getExtraString("signing.keyId"), signingKey, getExtraString("signing.password"))
+        }
         sign(publishing.publications)
     }
 }
