@@ -22,17 +22,22 @@ jobs:
           ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
       - name: Get tag
         id: vars
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ github.event.inputs.tag }}
         run: |
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            echo "tag=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            printf 'tag=%s\n' "$INPUT_TAG" >> "$GITHUB_OUTPUT"
           else
             echo "tag=${GITHUB_REF#refs/*/}" >> "$GITHUB_OUTPUT"
           fi
       - name: Verify tag
+        env:
+          TAG: ${{ steps.vars.outputs.tag }}
         run: |
           VERSION=$(grep VERSION_NAME gradle.properties | awk -F= '{ print $2 }' | sed "s/-SNAPSHOT//")
-          if [ "${{ steps.vars.outputs.tag }}" != "$VERSION" ]; then {
-            echo "Tag ${{ steps.vars.outputs.tag }} does not match the package version ($VERSION)"
+          if [ "$TAG" != "$VERSION" ]; then {
+            echo "Tag $TAG does not match the package version ($VERSION)"
             exit 1
           } fi
 
