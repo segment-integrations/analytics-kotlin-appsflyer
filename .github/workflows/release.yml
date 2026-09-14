@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - '*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to (re-)publish to Maven Central'
+        required: true
+        type: string
 
 jobs:
   release:
@@ -11,22 +17,34 @@ jobs:
     runs-on: ubuntu-latest
     environment: deployment
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
       - name: Get tag
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          INPUT_TAG: ${{ github.event.inputs.tag }}
+        run: |
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            printf 'tag=%s\n' "$INPUT_TAG" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF#refs/*/}" >> "$GITHUB_OUTPUT"
+          fi
       - name: Verify tag
+        env:
+          TAG: ${{ steps.vars.outputs.tag }}
         run: |
           VERSION=$(grep VERSION_NAME gradle.properties | awk -F= '{ print $2 }' | sed "s/-SNAPSHOT//")
-          if [ "${{ steps.vars.outputs.tag }}" != "$VERSION" ]; then {
-            echo "Tag ${{ steps.vars.outputs.tag }} does not match the package version ($VERSION)"
+          if [ "$TAG" != "$VERSION" ]; then {
+            echo "Tag $TAG does not match the package version ($VERSION)"
             exit 1
           } fi
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: cache gradle dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: |
             ~/.gradle/caches
@@ -45,11 +63,11 @@ jobs:
 
       - name: create release
         run: |
-          curl \
-             -X POST \
-             -H "Authorization: token $GITHUB_TOKEN" \
-                https://api.github.com/repos/${{github.repository}}/releases \
-             -d '{"tag_name": "${{ env.RELEASE_VERSION }}", "name": "${{ env.RELEASE_VERSION }}", "body": "Release of version ${{ env.RELEASE_VERSION }}", "draft": false, "prerelease": false, "generate_release_notes": true}'
+          gh release view "$RELEASE_VERSION" --repo "${{ github.repository }}" >/dev/null 2>&1 || \
+          gh release create "$RELEASE_VERSION" --repo "${{ github.repository }}" \
+            --title "$RELEASE_VERSION" \
+            --notes "Release of version $RELEASE_VERSION" \
+            --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
