@@ -4,6 +4,12 @@ on:
   push:
     tags:
       - '*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing tag to (re-)publish to Maven Central'
+        required: true
+        type: string
 
 jobs:
   release:
@@ -12,9 +18,16 @@ jobs:
     environment: deployment
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.tag || github.ref }}
       - name: Get tag
         id: vars
-        run: echo ::set-output name=tag::${GITHUB_REF#refs/*/}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "tag=${{ github.event.inputs.tag }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${GITHUB_REF#refs/*/}" >> "$GITHUB_OUTPUT"
+          fi
       - name: Verify tag
         run: |
           VERSION=$(grep VERSION_NAME gradle.properties | awk -F= '{ print $2 }' | sed "s/-SNAPSHOT//")
@@ -45,11 +58,11 @@ jobs:
 
       - name: create release
         run: |
-          curl \
-             -X POST \
-             -H "Authorization: token $GITHUB_TOKEN" \
-                https://api.github.com/repos/${{github.repository}}/releases \
-             -d '{"tag_name": "${{ env.RELEASE_VERSION }}", "name": "${{ env.RELEASE_VERSION }}", "body": "Release of version ${{ env.RELEASE_VERSION }}", "draft": false, "prerelease": false, "generate_release_notes": true}'
+          gh release view "$RELEASE_VERSION" --repo "${{ github.repository }}" >/dev/null 2>&1 || \
+          gh release create "$RELEASE_VERSION" --repo "${{ github.repository }}" \
+            --title "$RELEASE_VERSION" \
+            --notes "Release of version $RELEASE_VERSION" \
+            --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           RELEASE_VERSION: ${{ steps.vars.outputs.tag }}
